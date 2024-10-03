@@ -47,17 +47,10 @@ public class WebApp {
     new ProcessorMetrics().bindTo(registry);
     new FileDescriptorMetrics().bindTo(registry);
 
-    Gauge.builder("Viandas", () -> (int) (Math.random() * 1000))
-        .description("Random number from My-Application.")
-        .strongReference(true)
-        .register(registry);
-
     final var micrometerPlugin = new MicrometerPlugin(config -> config.registry = registry);
 
-    var URL_HELADERAS = env.get("URL_HELADERAS");
-
     var objectMapper = createObjectMapper();
-    var fachada = new Fachada();
+    var fachada = new Fachada(registry);
     fachada.setHeladerasProxy(new HeladerasProxy(objectMapper));
 
     var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));
