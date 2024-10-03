@@ -37,11 +37,11 @@ public class Fachada implements FachadaViandas {
     this.viandasVencidasData = new AtomicInteger(0);
     this.viandasEnTrasladoData = new AtomicInteger(0);
 
-    Gauge.builder("viandas.preparadas", viandasPreparadasData, AtomicInteger::get)
+    Gauge.builder("viandas_preparadas", viandasPreparadasData, AtomicInteger::get)
         .register(registry);
-    Gauge.builder("viandas.vencidas", viandasVencidasData, AtomicInteger::get)
+    Gauge.builder("viandas_vencidas", viandasVencidasData, AtomicInteger::get)
         .register(registry);
-    Gauge.builder("viandas.enTraslado", viandasEnTrasladoData, AtomicInteger::get)
+    Gauge.builder("viandas_enTraslado", viandasEnTrasladoData, AtomicInteger::get)
         .register(registry);
   }
 
