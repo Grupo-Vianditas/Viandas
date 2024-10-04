@@ -1,6 +1,7 @@
 package ar.edu.utn.dds.k3003.controller;
 
 import ar.edu.utn.dds.k3003.app.Fachada;
+import ar.edu.utn.dds.k3003.facades.dtos.EstadoViandaEnum;
 import ar.edu.utn.dds.k3003.facades.dtos.ViandaDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -91,6 +92,15 @@ public class ViandaController {
         .get();
 
     var viandaDTO = this.fachada.modificarHeladera(qr, heladeraId);
+    context.json(viandaDTO);
+  }
+  public void modificarEstado(Context context) {
+    var qr = context.pathParamAsClass("qr", String.class)
+        .get();
+    var estado = context.queryParamAsClass("estado", String.class)
+        .get();
+
+    var viandaDTO = this.fachada.modificarEstado(qr, EstadoViandaEnum.valueOf(estado));
     context.json(viandaDTO);
   }
 

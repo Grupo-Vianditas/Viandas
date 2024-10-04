@@ -146,6 +146,9 @@ public class Fachada implements FachadaViandas {
 
   public void clearDB() {
     viandaRepository.clearDB();
+    viandasPreparadasData.set(0);
+    viandasVencidasData.set(0);
+    viandasEnTrasladoData.set(0);
   }
 
   public List<ViandaDTO> preloadDB() {
@@ -160,6 +163,7 @@ public class Fachada implements FachadaViandas {
       ));
     });
     viandas.forEach(viandaRepository::save);
+    viandasPreparadasData.set(viandas.size());
     return viandas.stream()
         .map(viandaMapper::map)
         .toList();

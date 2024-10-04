@@ -1,6 +1,7 @@
 package ar.edu.utn.dds.k3003.repositories;
 
 import ar.edu.utn.dds.k3003.model.Vianda;
+import io.javalin.http.NotFoundResponse;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -9,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import lombok.Getter;
@@ -56,11 +58,15 @@ public class ViandaRepository {
     return vianda;
   }
 
-  public Vianda findByQr(String qr) {
-    TypedQuery<Vianda> query =
-        entityManager.createQuery("SELECT v FROM Vianda v WHERE v.qr = :qr", Vianda.class);
-    query.setParameter("qr", qr);
-    return query.getSingleResult();
+  public Vianda findByQr(String qr) throws NotFoundResponse {
+    try {
+      TypedQuery<Vianda> query =
+          entityManager.createQuery("SELECT v FROM Vianda v WHERE v.qr = :qr", Vianda.class);
+      query.setParameter("qr", qr);
+      return query.getSingleResult();
+    } catch (NoResultException e) {
+      throw new NotFoundResponse("No se encontro una vianda con ese QR");
+    }
   }
 
   public List<Vianda> findByCollaboratorIdAndYearAndMonth(

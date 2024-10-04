@@ -85,7 +85,8 @@ public class WebApp {
     );
     app.get("/viandas/{qr}", viandasController::buscarPorQR);
     app.get("/viandas/{qr}/vencida", viandasController::evaluarVencimiento);
-    app.patch("/viandas/{qrVianda}", viandasController::modificarHeladera);
+    app.patch("/viandas/{qr}/estado", viandasController::modificarEstado);
+    app.patch("/viandas/{qr}/heladera", viandasController::modificarHeladera);
 
   }
 
