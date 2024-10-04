@@ -13,6 +13,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.PropertyValueException;
 import org.hibernate.exception.ConstraintViolationException;
 
 @Getter
@@ -43,6 +44,9 @@ public class ViandaRepository {
           transaction.rollback();
         }
         throw new RuntimeException("Ya existe una vianda con el mismo codigo QR");
+      }
+      if (pe.getCause() instanceof PropertyValueException) {
+        throw new RuntimeException("Un campo requerido no esta presente.");
       }
     } finally {
       if (Objects.nonNull(transaction) && transaction.isActive()) {
