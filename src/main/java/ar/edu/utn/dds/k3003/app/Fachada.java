@@ -77,7 +77,7 @@ public class Fachada implements FachadaViandas {
       viandasPreparadasData.decrementAndGet();
     }
     if (estadoViandaEnum.equals(EstadoViandaEnum.EN_TRASLADO)) {
-      viandasPreparadasData.incrementAndGet();
+      viandasEnTrasladoData.incrementAndGet();
     }
     if (viandaEncontrada.getEstado()
         .equals(EstadoViandaEnum.EN_TRASLADO)) {
