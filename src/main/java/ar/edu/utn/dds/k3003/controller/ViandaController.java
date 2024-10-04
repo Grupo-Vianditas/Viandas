@@ -4,6 +4,7 @@ import ar.edu.utn.dds.k3003.app.Fachada;
 import ar.edu.utn.dds.k3003.facades.dtos.ViandaDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ViandaController {
@@ -20,6 +21,19 @@ public class ViandaController {
       var viandaDTORta = this.fachada.agregar(viandaDTO);
 
       context.json(viandaDTORta);
+      context.status(HttpStatus.CREATED);
+    } catch (RuntimeException ex) {
+      context.result(ex.getLocalizedMessage());
+      context.status(HttpStatus.BAD_REQUEST);
+    }
+
+  }
+
+  public void preloadDB(Context context) {
+    try {
+      var viandasRespuesta = this.fachada.preloadDB();
+
+      context.json(viandasRespuesta);
       context.status(HttpStatus.CREATED);
     } catch (RuntimeException ex) {
       context.result(ex.getLocalizedMessage());

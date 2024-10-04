@@ -77,7 +77,8 @@ public class WebApp {
         .start(port);
 
     app.post("/viandas", viandasController::agregarVianda);
-    app.delete("/viandas", viandasController::limpiarDB);
+    app.post("/load", viandasController::preloadDB);
+    app.delete("/clear", viandasController::limpiarDB);
     app.get(
         "/viandas/search/findByColaboradorIdAndAnioAndMes",
         viandasController::findByColaboradorIdAndAnioAndMes

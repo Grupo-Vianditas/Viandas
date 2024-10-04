@@ -11,9 +11,12 @@ import ar.edu.utn.dds.k3003.repositories.utils.PersistenceUtils;
 import io.javalin.http.BadRequestResponse;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -145,4 +148,20 @@ public class Fachada implements FachadaViandas {
     viandaRepository.clearDB();
   }
 
+  public List<ViandaDTO> preloadDB() {
+    List<String> qrs = IntStream.rangeClosed(1, 5)
+        .mapToObj("a"::repeat)
+        .toList();
+    List<Vianda> viandas = new ArrayList<>();
+    IntStream rangeNumber = IntStream.range(1, 5);
+    rangeNumber.forEach(number -> {
+      viandas.add(new Vianda(qrs.get(number - 1), (long) number, number, EstadoViandaEnum.PREPARADA,
+          LocalDateTime.now()
+      ));
+    });
+    viandas.forEach(viandaRepository::save);
+    return viandas.stream()
+        .map(viandaMapper::map)
+        .toList();
+  }
 }
