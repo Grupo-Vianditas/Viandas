@@ -47,7 +47,6 @@ public class WebApp {
     new ProcessorMetrics().bindTo(registry);
     new FileDescriptorMetrics().bindTo(registry);
 
-    final var micrometerPlugin = new MicrometerPlugin(config -> config.registry = registry);
 
     var objectMapper = createObjectMapper();
     var fachada = new Fachada(registry);
@@ -55,6 +54,7 @@ public class WebApp {
 
     var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));
     var viandasController = new ViandaController(fachada);
+    final var micrometerPlugin = new MicrometerPlugin(config -> config.registry = registry);
 
     var app = Javalin.create(config -> {
           config.registerPlugin(micrometerPlugin);
