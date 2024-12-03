@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.Javalin;
+import io.javalin.http.HttpStatus;
 import io.javalin.micrometer.MicrometerPlugin;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
@@ -87,7 +88,7 @@ public class WebApp {
     app.get("/viandas/{qr}/vencida", viandasController::evaluarVencimiento);
     app.patch("/viandas/{qr}/estado", viandasController::modificarEstado);
     app.patch("/viandas/{qrVianda}", viandasController::modificarHeladera);
-
+    app.get("/status", ctx -> ctx.status(HttpStatus.OK));
   }
 
   public static ObjectMapper createObjectMapper() {
