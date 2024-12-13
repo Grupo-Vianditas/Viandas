@@ -7,6 +7,7 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class ViandaController {
 
@@ -46,10 +47,14 @@ public class ViandaController {
   public void findByColaboradorIdAndAnioAndMes(Context context) {
     var colaboradorId = context.queryParamAsClass("colaboradorId", Long.class)
         .get();
-    var anio = context.queryParamAsClass("anio", Integer.class)
-        .get();
-    var mes = context.queryParamAsClass("mes", Integer.class)
-        .get();
+    var anio = Objects.nonNull(context.queryParam("anio"))
+        ? context.queryParamAsClass("anio", Integer.class).get()
+        : null;
+
+    var mes = Objects.nonNull(context.queryParam("mes"))
+        ? context.queryParamAsClass("mes", Integer.class).get()
+        : null;
+
     try {
       var viandaDTOS = this.fachada.viandasDeColaborador(colaboradorId, mes, anio);
       context.json(viandaDTOS);

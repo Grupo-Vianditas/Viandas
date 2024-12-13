@@ -74,20 +74,29 @@ public class ViandaRepository {
       Integer mes,
       Integer anio
   ) {
-    YearMonth yearMonth = YearMonth.of(anio, mes);
-    LocalDateTime startOfMonth = yearMonth.atDay(1)
-        .atStartOfDay();
-    LocalDateTime endOfMonth = yearMonth.atEndOfMonth()
-        .atTime(LocalTime.MAX);
-
-    TypedQuery<Vianda> query = entityManager.createQuery(
-        "SELECT v FROM Vianda v WHERE v.colaboradorId = :colaboradorId "
-            + "AND v.fechaElaboracion >= :startOfMonth AND v.fechaElaboracion <= :endOfMonth",
-        Vianda.class
+    StringBuilder queryString = new StringBuilder(
+        "SELECT v FROM Vianda v WHERE v.colaboradorId = :colaboradorId"
     );
+
+    LocalDateTime startOfMonth = null;
+    LocalDateTime endOfMonth = null;
+
+    if (Objects.nonNull(anio) && Objects.nonNull(mes)) {
+      YearMonth yearMonth = YearMonth.of(anio, mes);
+      startOfMonth = yearMonth.atDay(1).atStartOfDay();
+      endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX);
+
+      queryString.append(" AND v.fechaElaboracion >= :startOfMonth AND v.fechaElaboracion <= :endOfMonth");
+    }
+
+    TypedQuery<Vianda> query = entityManager.createQuery(queryString.toString(), Vianda.class);
+
     query.setParameter("colaboradorId", colaboradorId);
-    query.setParameter("startOfMonth", startOfMonth);
-    query.setParameter("endOfMonth", endOfMonth);
+
+    if (Objects.nonNull(startOfMonth)) {
+      query.setParameter("startOfMonth", startOfMonth);
+      query.setParameter("endOfMonth", endOfMonth);
+    }
 
     return query.getResultList();
   }
